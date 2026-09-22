@@ -1,0 +1,23 @@
+import pandas as pd
+
+# Load Sheet 2
+df = pd.read_excel('New Microsoft Excel Worksheet.xlsx', sheet_name='Sheet2')
+
+# Set correct headers from Row 0
+df.columns = df.iloc[0]
+df = df[1:].reset_index(drop=True)
+
+# Select relevant columns
+columns_to_keep = [
+    'Sl No.', 'Name of Centre', 'Division', 
+    df.columns[3], df.columns[4], df.columns[5], df.columns[6], df.columns[7], 
+    '01-09-2026 (Up to 21 Sept)', 'Total Txn in FY 26-27'
+]
+
+df_clean = df[columns_to_keep].dropna(subset=['Name of Centre'])
+
+# Standardize column names for Web/JS
+df_clean.columns = ['sl_no', 'centre_name', 'division', 'apr_26', 'may_26', 'jun_26', 'jul_26', 'aug_26', 'sep_26', 'total_txn']
+
+# Export to JSON
+df_clean.to_json('data.json', orient='records')
